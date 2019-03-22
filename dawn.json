@@ -1004,6 +1004,9 @@
                 "args": [
                     {"name": "descriptor", "type": "texture view descriptor", "annotation": "const*"}
                 ]
+            },
+            {
+                "name": "destroy"
             }
         ]
     },
