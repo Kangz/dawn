@@ -33,8 +33,8 @@ namespace dawn_native { namespace vulkan {
       private:
         VkPipelineVertexInputStateCreateInfo ComputeInputStateDesc(
             const InputStateDescriptor* inputState,
-            std::array<VkVertexInputBindingDescription, kMaxVertexInputs>& mBindings,
-            std::array<VkVertexInputAttributeDescription, kMaxVertexAttributes>& mAttributes);
+            VkVertexInputBindingDescription* mBindings,
+            VkVertexInputAttributeDescription* mAttributes);
 
         VkPipeline mHandle = VK_NULL_HANDLE;
     };

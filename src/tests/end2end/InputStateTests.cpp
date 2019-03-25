@@ -33,9 +33,6 @@ constexpr static unsigned int kRTSize = 400;
 constexpr static unsigned int kRTCellOffset = 50;
 constexpr static unsigned int kRTCellSize = 100;
 
-static dawn::VertexAttributeDescriptor vertexAttributes[kMaxVertexAttributes];
-static dawn::VertexInputDescriptor vertexInputs[kMaxVertexInputs];
-
 class InputStateTest : public DawnTest {
     protected:
         void SetUp() override {
@@ -221,6 +218,8 @@ class InputStateTest : public DawnTest {
         }
 
         utils::BasicRenderPass renderPass;
+        dawn::VertexAttributeDescriptor vertexAttributes[kMaxVertexAttributes];
+        dawn::VertexInputDescriptor vertexInputs[kMaxVertexInputs];
 };
 
 // Test compilation and usage of the fixture :)

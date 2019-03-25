@@ -299,7 +299,7 @@ namespace dawn_native { namespace vulkan {
         std::array<VkVertexInputAttributeDescription, kMaxVertexAttributes> mAttributes;
         const InputStateDescriptor* inputState = GetInputStateDescriptor();
         VkPipelineVertexInputStateCreateInfo inputStateCreateInfo =
-            ComputeInputStateDesc(inputState, mBindings, mAttributes);
+            ComputeInputStateDesc(inputState, &mBindings[0], &mAttributes[0]);
 
         VkPipelineInputAssemblyStateCreateInfo inputAssembly;
         inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -447,8 +447,8 @@ namespace dawn_native { namespace vulkan {
 
     VkPipelineVertexInputStateCreateInfo RenderPipeline::ComputeInputStateDesc(
         const InputStateDescriptor* inputState,
-        std::array<VkVertexInputBindingDescription, kMaxVertexInputs>& mBindings,
-        std::array<VkVertexInputAttributeDescription, kMaxVertexAttributes>& mAttributes) {
+        VkVertexInputBindingDescription* mBindings,
+        VkVertexInputAttributeDescription* mAttributes) {
         // Fill in the "binding info" that will be chained in the create info
         uint32_t bindingCount = 0;
         for (uint32_t i : IterateBitSet(GetInputsSetMask())) {
@@ -482,9 +482,9 @@ namespace dawn_native { namespace vulkan {
         mCreateInfo.pNext = nullptr;
         mCreateInfo.flags = 0;
         mCreateInfo.vertexBindingDescriptionCount = bindingCount;
-        mCreateInfo.pVertexBindingDescriptions = mBindings.data();
+        mCreateInfo.pVertexBindingDescriptions = mBindings;
         mCreateInfo.vertexAttributeDescriptionCount = attributeCount;
-        mCreateInfo.pVertexAttributeDescriptions = mAttributes.data();
+        mCreateInfo.pVertexAttributeDescriptions = mAttributes;
         return mCreateInfo;
     }
 

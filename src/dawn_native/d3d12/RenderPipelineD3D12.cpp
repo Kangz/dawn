@@ -340,7 +340,7 @@ namespace dawn_native { namespace d3d12 {
         // D3D12 logs warnings if any empty input state is used
         std::array<D3D12_INPUT_ELEMENT_DESC, kMaxVertexAttributes> inputElementDescriptors;
         if (GetAttributesSetMask().any()) {
-            descriptorD3D12.InputLayout = ComputeInputLayout(inputElementDescriptors);
+            descriptorD3D12.InputLayout = ComputeInputLayout(&inputElementDescriptors[0]);
         }
 
         descriptorD3D12.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
@@ -395,7 +395,7 @@ namespace dawn_native { namespace d3d12 {
     }
 
     D3D12_INPUT_LAYOUT_DESC RenderPipeline::ComputeInputLayout(
-        std::array<D3D12_INPUT_ELEMENT_DESC, kMaxVertexAttributes>& inputElementDescriptors) {
+        D3D12_INPUT_ELEMENT_DESC* inputElementDescriptors) {
         D3D12_INPUT_LAYOUT_DESC inputLayoutDescriptor;
         const auto& attributesSetMask = GetAttributesSetMask();
 

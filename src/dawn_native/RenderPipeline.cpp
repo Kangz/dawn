@@ -25,7 +25,7 @@ namespace dawn_native {
     namespace {
 
         MaybeError ValidateVertexInputDescriptor(const VertexInputDescriptor* input,
-                                                 std::bitset<kMaxVertexInputs>& inputsSetMask) {
+                                                 std::bitset<kMaxVertexInputs>* inputsSetMask) {
             DAWN_TRY(ValidateInputStepMode(input->stepMode));
             if (input->inputSlot >= kMaxVertexInputs) {
                 return DAWN_VALIDATION_ERROR("Setting input out of bounds");
@@ -33,18 +33,18 @@ namespace dawn_native {
             if (input->stride > kMaxVertexInputStride) {
                 return DAWN_VALIDATION_ERROR("Setting input stride out of bounds");
             }
-            if (inputsSetMask[input->inputSlot]) {
+            if ((*inputsSetMask)[input->inputSlot]) {
                 return DAWN_VALIDATION_ERROR("Setting already set input");
             }
 
-            inputsSetMask.set(input->inputSlot);
+            inputsSetMask->set(input->inputSlot);
             return {};
         }
 
         MaybeError ValidateVertexAttributeDescriptor(
             const VertexAttributeDescriptor* attribute,
-            const std::bitset<kMaxVertexInputs>& inputsSetMask,
-            std::bitset<kMaxVertexAttributes>& attributesSetMask) {
+            const std::bitset<kMaxVertexInputs>* inputsSetMask,
+            std::bitset<kMaxVertexAttributes>* attributesSetMask) {
             DAWN_TRY(ValidateVertexFormat(attribute->format));
 
             if (attribute->shaderLocation >= kMaxVertexAttributes) {
@@ -62,22 +62,22 @@ namespace dawn_native {
             if (attribute->offset + VertexFormatSize(attribute->format) > kMaxVertexAttributeEnd) {
                 return DAWN_VALIDATION_ERROR("Setting attribute offset out of bounds");
             }
-            if (attributesSetMask[attribute->shaderLocation]) {
+            if ((*attributesSetMask)[attribute->shaderLocation]) {
                 return DAWN_VALIDATION_ERROR("Setting already set attribute");
             }
-            if (!inputsSetMask[attribute->inputSlot]) {
+            if (!(*inputsSetMask)[attribute->inputSlot]) {
                 return DAWN_VALIDATION_ERROR(
                     "Vertex attribute slot doesn't match any vertex input slot");
             }
 
-            attributesSetMask.set(attribute->shaderLocation);
+            attributesSetMask->set(attribute->shaderLocation);
             return {};
         }
 
         MaybeError ValidateInputStateDescriptor(
             const InputStateDescriptor* descriptor,
-            std::bitset<kMaxVertexInputs>& inputsSetMask,
-            std::bitset<kMaxVertexAttributes>& attributesSetMask) {
+            std::bitset<kMaxVertexInputs>* inputsSetMask,
+            std::bitset<kMaxVertexAttributes>* attributesSetMask) {
             if (descriptor->nextInChain != nullptr) {
                 return DAWN_VALIDATION_ERROR("nextInChain must be nullptr");
             }
@@ -279,8 +279,8 @@ namespace dawn_native {
         DAWN_TRY(ValidateIndexFormat(descriptor->indexFormat));
         std::bitset<kMaxVertexInputs> inputsSetMask;
         std::bitset<kMaxVertexAttributes> attributesSetMask;
-        DAWN_TRY(
-            ValidateInputStateDescriptor(descriptor->inputState, inputsSetMask, attributesSetMask));
+        DAWN_TRY(ValidateInputStateDescriptor(descriptor->inputState, &inputsSetMask,
+                                              &attributesSetMask));
         DAWN_TRY(ValidatePrimitiveTopology(descriptor->primitiveTopology));
         DAWN_TRY(ValidatePipelineStageDescriptor(device, descriptor->vertexStage,
                                                  descriptor->layout, dawn::ShaderStage::Vertex));

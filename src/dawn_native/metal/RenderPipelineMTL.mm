@@ -316,7 +316,7 @@ namespace dawn_native { namespace metal {
 
         descriptorMTL.inputPrimitiveTopology = MTLInputPrimitiveTopology(GetPrimitiveTopology());
 
-        descriptorMTL.vertexDescriptor = ComputeVertexDesc();
+        descriptorMTL.vertexDescriptor = MakeVertexDesc();
 
         // TODO(kainino@chromium.org): push constants, textures, samplers
 
@@ -324,6 +324,7 @@ namespace dawn_native { namespace metal {
             NSError* error = nil;
             mMtlRenderPipelineState = [mtlDevice newRenderPipelineStateWithDescriptor:descriptorMTL
                                                                                 error:&error];
+            [descriptorMTL.vertexDescriptor release];
             [descriptorMTL release];
             if (error != nil) {
                 NSLog(@" error => %@", error);
@@ -361,8 +362,8 @@ namespace dawn_native { namespace metal {
         return mMtlDepthStencilState;
     }
 
-    MTLVertexDescriptor* RenderPipeline::ComputeVertexDesc() {
-        MTLVertexDescriptor* mtlVertexDescriptor = [[MTLVertexDescriptor new] autorelease];
+    MTLVertexDescriptor* RenderPipeline::MakeVertexDesc() {
+        MTLVertexDescriptor* mtlVertexDescriptor = [MTLVertexDescriptor new];
 
         const auto& attributesSetMask = GetAttributesSetMask();
         for (uint32_t i = 0; i < attributesSetMask.size(); ++i) {

@@ -94,6 +94,7 @@ void init() {
         descriptor.layout = dawnDeviceCreatePipelineLayout(device, &pl);
 
         DawnInputStateDescriptor inputState;
+        inputState.nextInChain = nullptr;
         inputState.numInputs = 0;
         inputState.inputs = nullptr;
         inputState.numAttributes = 0;

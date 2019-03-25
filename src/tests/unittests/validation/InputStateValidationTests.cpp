@@ -17,7 +17,7 @@
 #include "utils/ComboRenderPipelineDescriptor.h"
 #include "utils/DawnHelpers.h"
 
-dawn::VertexInputDescriptor kBaseInput = {
+constexpr static dawn::VertexInputDescriptor kBaseInput = {
     0,                            // inputSlot
     0,                            // stride
     dawn::InputStepMode::Vertex,  // stepMode

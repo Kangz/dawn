@@ -182,6 +182,7 @@ namespace dawn_native { namespace opengl {
         modules[dawn::ShaderStage::Fragment] = ToBackend(descriptor->fragmentStage->module);
 
         PipelineGL::Initialize(ToBackend(GetLayout()), modules);
+        CreateVAOForInputState(descriptor->inputState);
     }
 
     RenderPipeline::~RenderPipeline() {
@@ -193,7 +194,7 @@ namespace dawn_native { namespace opengl {
         return mGlPrimitiveTopology;
     }
 
-    void RenderPipeline::ApplyInputState(const InputStateDescriptor* inputState) {
+    void RenderPipeline::CreateVAOForInputState(const InputStateDescriptor* inputState) {
         glGenVertexArrays(1, &mVertexArrayObject);
         glBindVertexArray(mVertexArrayObject);
         auto& attributesSetMask = GetAttributesSetMask();
@@ -228,9 +229,7 @@ namespace dawn_native { namespace opengl {
     void RenderPipeline::ApplyNow(PersistentPipelineState& persistentPipelineState) {
         PipelineGL::ApplyNow();
 
-        if (!mVertexArrayObject) {
-            ApplyInputState(GetInputStateDescriptor());
-        }
+        ASSERT(mVertexArrayObject);
         glBindVertexArray(mVertexArrayObject);
 
         ApplyDepthStencilState(GetDepthStencilStateDescriptor(), &persistentPipelineState);

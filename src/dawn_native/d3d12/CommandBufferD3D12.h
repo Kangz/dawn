@@ -15,12 +15,16 @@
 #ifndef DAWNNATIVE_D3D12_COMMANDBUFFERD3D12_H_
 #define DAWNNATIVE_D3D12_COMMANDBUFFERD3D12_H_
 
+#include "common/Constants.h"
+
 #include "dawn_native/CommandAllocator.h"
 #include "dawn_native/CommandBuffer.h"
 #include "dawn_native/RenderPipeline.h"
 
 #include "dawn_native/d3d12/Forward.h"
 #include "dawn_native/d3d12/d3d12_platform.h"
+
+#include <array>
 
 namespace dawn_native {
     struct BeginRenderPassCmd;
@@ -30,6 +34,7 @@ namespace dawn_native { namespace d3d12 {
 
     class Device;
     class RenderPassDescriptorHeapTracker;
+    class RenderPipeline;
 
     struct BindGroupStateTracker;
 
