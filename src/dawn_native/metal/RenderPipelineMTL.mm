@@ -324,7 +324,6 @@ namespace dawn_native { namespace metal {
             NSError* error = nil;
             mMtlRenderPipelineState = [mtlDevice newRenderPipelineStateWithDescriptor:descriptorMTL
                                                                                 error:&error];
-            [descriptorMTL.vertexDescriptor release];
             [descriptorMTL release];
             if (error != nil) {
                 NSLog(@" error => %@", error);
